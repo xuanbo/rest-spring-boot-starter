@@ -8,7 +8,7 @@
 <dependency>
     <groupId>tk.fishfish</groupId>
     <artifactId>rest-spring-boot-starter</artifactId>
-    <version>1.0.0.RELEASE</version>
+    <version>1.1.0.RELEASE</version>
 </dependency>
 ```
 
@@ -50,7 +50,7 @@ public class DemoController {
 }
 ```
 
-返回值进行包装，忽略`org.springframework.http.ResponseEntity`值类型。
+默认（增加 @ApiResultIgnore 注解可忽略）对返回值进行统一包装，忽略`org.springframework.http.ResponseEntity`值类型。
 
 ```json
 {
@@ -62,3 +62,12 @@ public class DemoController {
     ]
 }
 ```
+
+### 1.1.0.RELEASE
+
+- 增加 @ApiResultIgnore 注解，显式声明不包装 API 返回结果
+
+### 1.0.0.RELEASE
+
+- 统一业务异常处理
+- 统一 API 返回格式包装

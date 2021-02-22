@@ -6,7 +6,7 @@
 
     <groupId>tk.fishfish</groupId>
     <artifactId>rest-spring-boot-starter</artifactId>
-    <version>1.0.0.RELEASE</version>
+    <version>1.1.0.RELEASE</version>
     <packaging>jar</packaging>
 
     <name>rest-spring-boot-starter</name>
@@ -40,7 +40,13 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
-        <spring.boot.version>2.1.2.RELEASE</spring.boot.version>
+        <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
+        <maven-source-plugin.version>3.1.0</maven-source-plugin.version>
+        <maven-javadoc-plugin.version>3.1.0</maven-javadoc-plugin.version>
+        <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
+        <nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
+        <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
+        <spring-boot.version>2.3.7.RELEASE</spring-boot.version>
     </properties>
 
     <repositories>
@@ -55,19 +61,82 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>${spring.boot.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
     </dependencies>
 
+    <dependencyManagement>
+        <dependencies>
+            <!-- spring boot dependencies -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <!-- 发布 -->
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>
-            <!-- doc plugin, Maven API文档生成插件 -->
+            <!-- This plugin compiles Java files -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- resources plugin 源码插件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- doc plugin 文档生成插件 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>${maven-javadoc-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -80,35 +149,11 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- resources plugin, Maven 资源插件 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <!-- compiler plugin, Maven编译插件 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-            <!-- gpg plugin,用于签名认证 -->
+            <!-- gpg plugin 用于签名认证 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.6</version>
+                <version>${maven-gpg-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>sign-artifacts</id>
@@ -119,11 +164,11 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- staging plugin, 用于自动执行发布阶段(免手动) -->
+            <!-- staging plugin 用于自动执行发布阶段(免手动) -->
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.7</version>
+                <version>${nexus-staging-maven-plugin.version}</version>
                 <extensions>true</extensions>
                 <configuration>
                     <serverId>ossrh</serverId>
@@ -131,11 +176,11 @@
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
             </plugin>
-            <!-- release plugin, 用于发布到release仓库部署插件 -->
+            <!-- release plugin 用于发布到release仓库部署插件 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.3</version>
+                <version>${maven-release-plugin.version}</version>
             </plugin>
         </plugins>
     </build>

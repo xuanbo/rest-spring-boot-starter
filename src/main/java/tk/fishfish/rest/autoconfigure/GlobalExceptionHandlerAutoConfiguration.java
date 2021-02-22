@@ -8,7 +8,7 @@ import tk.fishfish.rest.GlobalExceptionHandler;
  * 全局异常处理配置
  *
  * @author 奔波儿灞
- * @since 1.0
+ * @since 1.0.0
  */
 @Configuration
 public class GlobalExceptionHandlerAutoConfiguration {

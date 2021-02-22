@@ -8,7 +8,7 @@ import tk.fishfish.rest.ApiResultResponseBodyAdvice;
  * 统一返回值包装
  *
  * @author 奔波儿灞
- * @since 1.0
+ * @since 1.0.0
  */
 @Configuration
 public class ApiResultResponseAutoConfiguration {

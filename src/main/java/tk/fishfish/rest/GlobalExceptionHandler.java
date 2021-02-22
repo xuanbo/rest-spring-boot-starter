@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * 全局异常处理，优先级为100
  *
  * @author 奔波儿灞
- * @since 1.0
+ * @since 1.0.0
  */
 @Order(100)
 @RestControllerAdvice

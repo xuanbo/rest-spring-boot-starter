@@ -1,13 +1,16 @@
 package tk.fishfish.rest;
 
+import lombok.Getter;
+
 /**
  * 业务异常
  *
  * @author 奔波儿灞
- * @since 1.0
+ * @since 1.0.0
  */
 public class BizException extends RuntimeException {
 
+    @Getter
     private final Integer code;
 
     public BizException(Integer code, String msg) {
@@ -18,10 +21,6 @@ public class BizException extends RuntimeException {
     public BizException(Integer code, String msg, Throwable throwable) {
         super(msg, throwable);
         this.code = code;
-    }
-
-    public Integer getCode() {
-        return code;
     }
 
 }

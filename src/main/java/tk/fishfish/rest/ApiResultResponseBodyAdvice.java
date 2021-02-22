@@ -11,18 +11,18 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 /**
- * 返回body处理，包装成ApiResult。如果是ResponseEntity，则不包装
+ * 返回body处理，包装成 {@link ApiResult} 。如果是 {@link ResponseEntity} 或 {@link ApiResultIgnore} 注解标识则不包装
  *
  * @author 奔波儿灞
  * @see tk.fishfish.rest.ApiResult
- * @since 1.0
+ * @since 1.0.0
  */
 @RestControllerAdvice(annotations = RestController.class)
 public class ApiResultResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 
     @Override
-    public boolean supports(MethodParameter methodParameter, Class<? extends HttpMessageConverter<?>> aClass) {
-        return true;
+    public boolean supports(MethodParameter methodParameter, Class<? extends HttpMessageConverter<?>> clazz) {
+        return !methodParameter.hasMethodAnnotation(ApiResultIgnore.class);
     }
 
     @Override
